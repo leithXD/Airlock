@@ -20,6 +20,7 @@ Item {
 
     property bool isOpen: false
     property bool shapeMenuOpen: false
+    property bool styleMenuOpen: false
     signal exitRequested()
 
     implicitWidth: 44
@@ -46,6 +47,11 @@ Item {
         { name: "Triangle",       value: MaterialShape.Triangle },
         { name: "Fan",            value: MaterialShape.Fan },
         { name: "Oval",           value: MaterialShape.Oval }
+    ]
+
+    readonly property var menuOptions: [
+        { name: "Classic", value: "classic" },
+        { name: "Locklike",      value: "locklike" }
     ]
 
     BlobGroup {
@@ -131,221 +137,36 @@ Item {
                 }
 
                 // ── Row 1: Avatar Shape (Scrollable Split-Button Dropdown) ──
-                Rectangle {
-                    id: rowShape
+                
+                SplitDropdownRow {
                     Layout.fillWidth: true
-                    implicitHeight: root.shapeMenuOpen ? (48 + shapeDropdownDrawer.implicitHeight) : 48
-                    topLeftRadius: 14
-                    topRightRadius: 14
-                    bottomLeftRadius: 4
-                    bottomRightRadius: 4
-                    clip: true
-
-                    Behavior on implicitHeight {
-                        NumberAnimation { duration: 220; easing.type: Easing.OutCubic }
+                    menuOpen: root.shapeMenuOpen
+                    onMenuOpenChanged: root.shapeMenuOpen = menuOpen
+                    options: root.shapeOptions
+                    selectedValue: Colours.avatarShape
+                    selectedName: Colours.avatarShapeName
+                    onOptionSelected: (value, name) => {
+                        Colours.avatarShape = value;
+                        Colours.avatarShapeName = name;
                     }
+                }
 
-                    color: hShapeHover.hovered || root.shapeMenuOpen
-                        ? Colours.tPalette.m3surfaceContainerHighest
-                        : Colours.tPalette.m3surfaceContainerHigh
-                    Behavior on color { ColorAnimation { duration: 120 } }
-                    HoverHandler { id: hShapeHover }
+                // menu style options
 
-                    // Main Row Header Bar
-                    Item {
-                        id: shapeHeaderBar
-                        anchors.top: parent.top
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        height: 48
-
-                        // Left Label Column
-                        Column {
-                            anchors.left: parent.left
-                            anchors.leftMargin: 14
-                            anchors.right: splitBtnContainer.left
-                            anchors.rightMargin: 8
-                            anchors.verticalCenter: parent.verticalCenter
-                            spacing: 1
-
-                            Text {
-                                width: parent.width
-                                text: "Avatar shape"
-                                font.family: "Google Sans Flex"
-                                font.pointSize: 11
-                                font.weight: Font.Medium
-                                color: Colours.palette.m3onSurface
-                                elide: Text.ElideRight
-                            }
-
-                            Text {
-                                width: parent.width
-                                text: "Mask geometry"
-                                font.family: "Google Sans Flex"
-                                font.pointSize: 8
-                                color: Colours.palette.m3outline
-                                elide: Text.ElideRight
-                            }
-                        }
-
-                        // Right Split Button Control
-                        Row {
-                            id: splitBtnContainer
-                            anchors.right: parent.right
-                            anchors.rightMargin: 14
-                            anchors.verticalCenter: parent.verticalCenter
-                            spacing: 2
-
-                            // Left Button: Label & Mini Shape Preview
-                            Rectangle {
-                                implicitHeight: 28
-                                implicitWidth: shapeBtnRow.implicitWidth + 16
-                                topLeftRadius: 14
-                                bottomLeftRadius: 14
-                                topRightRadius: 4
-                                bottomRightRadius: 4
-                                color: Colours.tPalette.m3primaryContainer
-
-                                StateLayer {
-                                    color: Colours.palette.m3onPrimaryContainer
-                                    onClicked: root.shapeMenuOpen = !root.shapeMenuOpen
-                                }
-
-                                RowLayout {
-                                    id: shapeBtnRow
-                                    anchors.centerIn: parent
-                                    spacing: 6
-
-                                    MaterialShape {
-                                        implicitSize: 14
-                                        shape: Colours.avatarShape
-                                        color: Colours.palette.m3onPrimaryContainer
-                                    }
-
-                                    Text {
-                                        text: Colours.avatarShapeName
-                                        font.family: "Google Sans Flex"
-                                        font.pointSize: 9
-                                        font.weight: Font.Medium
-                                        color: Colours.palette.m3onPrimaryContainer
-                                    }
-                                }
-                            }
-
-                            // Right Button: Arrow Indicator
-                            Rectangle {
-                                implicitHeight: 28
-                                implicitWidth: 26
-                                topLeftRadius: 4
-                                bottomLeftRadius: 4
-                                topRightRadius: 14
-                                bottomRightRadius: 14
-                                color: Colours.tPalette.m3primaryContainer
-
-                                StateLayer {
-                                    color: Colours.palette.m3onPrimaryContainer
-                                    onClicked: root.shapeMenuOpen = !root.shapeMenuOpen
-                                }
-
-                                MaterialIcon {
-                                    anchors.centerIn: parent
-                                    text: "expand_more"
-                                    fontStyle.pointSize: 16
-                                    color: Colours.palette.m3onPrimaryContainer
-                                    rotation: root.shapeMenuOpen ? 180 : 0
-                                    Behavior on rotation { NumberAnimation { duration: 180 } }
-                                }
-                            }
-                        }
-                    }
-
-                    // Dropdown Drawer List
-                    Item {
-                        id: shapeDropdownDrawer
-                        anchors.top: shapeHeaderBar.bottom
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.leftMargin: 8
-                        anchors.rightMargin: 8
-                        anchors.bottomMargin: 8
-                        implicitHeight: 140
-                        visible: root.shapeMenuOpen
-
-                        VerticalFadeListView {
-                            id: shapeListView
-                            anchors.fill: parent
-                            clip: true
-                            model: root.shapeOptions
-                            spacing: 2
-                            fadeAmount: 0.15
-
-                            delegate: Rectangle {
-                                id: shapeItem
-                                required property var modelData
-                                required property int index
-
-                                width: shapeListView.width
-                                implicitHeight: 32
-                                radius: 8
-
-                                readonly property bool isSelected: Colours.avatarShape === modelData.value
-
-                                color: shapeItemState.containsMouse || shapeItem.isSelected
-                                    ? Colours.tPalette.m3primaryContainer
-                                    : "transparent"
-                                Behavior on color { ColorAnimation { duration: 100 } }
-
-                                StateLayer {
-                                    id: shapeItemState
-                                    onClicked: {
-                                        Colours.avatarShape = shapeItem.modelData.value;
-                                        Colours.avatarShapeName = shapeItem.modelData.name;
-                                        root.shapeMenuOpen = false;
-                                    }
-                                }
-
-                                RowLayout {
-                                    anchors.fill: parent
-                                    anchors.leftMargin: 10
-                                    anchors.rightMargin: 10
-                                    spacing: 8
-
-                                    MaterialShape {
-                                        implicitSize: 16
-                                        shape: shapeItem.modelData.value
-                                        color: shapeItem.isSelected
-                                            ? Colours.palette.m3onPrimaryContainer
-                                            : Colours.palette.m3primary
-                                    }
-
-                                    Text {
-                                        Layout.fillWidth: true
-                                        text: shapeItem.modelData.name
-                                        font.family: "Google Sans Flex"
-                                        font.pointSize: 9
-                                        font.weight: shapeItem.isSelected ? Font.Bold : Font.Normal
-                                        color: shapeItem.isSelected
-                                            ? Colours.palette.m3onPrimaryContainer
-                                            : Colours.palette.m3onSurface
-                                    }
-
-                                    MaterialIcon {
-                                        visible: shapeItem.isSelected
-                                        text: "check"
-                                        fontStyle.pointSize: 14
-                                        color: Colours.palette.m3onPrimaryContainer
-                                    }
-                                }
-
-                                TapHandler {
-                                    onTapped: {
-                                        Colours.avatarShape = shapeItem.modelData.value;
-                                        Colours.avatarShapeName = shapeItem.modelData.name;
-                                        root.shapeMenuOpen = false;
-                                    }
-                                }
-                            }
-                        }
+                SplitDropdownRow {
+                    Layout.fillWidth: true
+                    title: "Menu Stlye"
+                    subtitle: "Greeter menu layout"
+                    topRounding: 4
+                    dropdownHeight: 75
+                    menuOpen: root.styleMenuOpen
+                    onMenuOpenChanged: root.styleMenuOpen = menuOpen
+                    options: root.menuOptions
+                    selectedValue: Colours.avatarShape
+                    selectedName: Colours.avatarShapeName
+                    onOptionSelected: (value, name) => {
+                        Colours.avatarShape = value;
+                        Colours.avatarShapeName = name;
                     }
                 }
 

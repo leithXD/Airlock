@@ -21,6 +21,7 @@ SessionSplitButton 1.0 SessionSplitButton.qml
 SettingsModal 1.0 SettingsModal.qml
 SettingsPanel 1.0 SettingsPanel.qml
 SliderRow 1.0 SliderRow.qml
+SplitDropdownRow 1.0 SplitDropdownRow.qml
 StatusCard 1.0 StatusCard.qml
 StyledRect 1.0 StyledRect.qml
 StyledSlider 1.0 StyledSlider.qml
