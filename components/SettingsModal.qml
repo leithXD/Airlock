@@ -50,7 +50,7 @@ Item {
     ]
 
     readonly property var menuOptions: [
-        { name: "Classical", value: 1 },
+        { name: "Classical", value: MaterialShape.Square },
         { name: "Locklike",      value: MaterialShape.ClamShell }
     ]
 
