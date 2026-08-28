@@ -93,6 +93,8 @@ void GreeterState::setActiveUser(const QString &user)
         cur[QStringLiteral("wallpaperEnabled")] = m_wallpaperEnabled;
         cur[QStringLiteral("avatarShape")] = m_avatarShape;
         cur[QStringLiteral("avatarShapeName")] = m_avatarShapeName;
+        cur[QStringLiteral("menuStyle")] = m_menuStyle;
+        cur[QStringLiteral("menuStyleName")] = m_menuStyleName;
         cur[QStringLiteral("lavaLampEnabled")] = m_lavaLampEnabled;
         cur[QStringLiteral("skipClockPage")] = m_skipClockPage;
         cur[QStringLiteral("schemeName")] = m_schemeName;
@@ -109,6 +111,8 @@ void GreeterState::setActiveUser(const QString &user)
         if (u.contains(QStringLiteral("wallpaperEnabled"))) m_wallpaperEnabled = u.value(QStringLiteral("wallpaperEnabled")).toBool(m_wallpaperEnabled);
         if (u.contains(QStringLiteral("avatarShape"))) m_avatarShape = u.value(QStringLiteral("avatarShape")).toInt(m_avatarShape);
         if (u.contains(QStringLiteral("avatarShapeName"))) m_avatarShapeName = u.value(QStringLiteral("avatarShapeName")).toString(m_avatarShapeName);
+        if (u.contains(QStringLiteral("menuStyle"))) m_menuStyle = u.value(QStringLiteral("menuStyle")).toInt(m_menuStyle);
+        if (u.contains(QStringLiteral("menuStyleName"))) m_menuStyleName = u.value(QStringLiteral("menuStyleName")).toString(m_menuStyleName);
         if (u.contains(QStringLiteral("lavaLampEnabled"))) m_lavaLampEnabled = u.value(QStringLiteral("lavaLampEnabled")).toBool(m_lavaLampEnabled);
         if (u.contains(QStringLiteral("skipClockPage"))) m_skipClockPage = u.value(QStringLiteral("skipClockPage")).toBool(m_skipClockPage);
         if (u.contains(QStringLiteral("schemeName"))) m_schemeName = u.value(QStringLiteral("schemeName")).toString(m_schemeName);
@@ -142,6 +146,8 @@ void GreeterState::setActiveUser(const QString &user)
     emit wallpaperEnabledChanged();
     emit avatarShapeChanged();
     emit avatarShapeNameChanged();
+    emit menuStyleChanged();
+    emit menuStyleNameChanged();
     emit lavaLampEnabledChanged();
     emit skipClockPageChanged();
     emit schemeNameChanged();
@@ -233,6 +239,8 @@ void GreeterState::loadFromDisk()
         if (u.contains(QStringLiteral("schemeFlavour"))) m_schemeFlavour = u.value(QStringLiteral("schemeFlavour")).toString(m_schemeFlavour);
         if (u.contains(QStringLiteral("schemeMode"))) m_schemeMode = u.value(QStringLiteral("schemeMode")).toString(m_schemeMode);
         if (u.contains(QStringLiteral("wallpaperEnabled"))) m_wallpaperEnabled = u.value(QStringLiteral("wallpaperEnabled")).toBool(m_wallpaperEnabled);
+        if (u.contains(QStringLiteral("menuStyle"))) m_menuStyle = u.value(QStringLiteral("menuStyle")).toInt(m_menuStyle);
+        if (u.contains(QStringLiteral("menuStyleName"))) m_menuStyleName = u.value(QStringLiteral("menuStyleName")).toString(m_menuStyleName);
     }
 
     // Fallback if dynamic scheme is selected but active user has no dynamic scheme on disk
@@ -268,6 +276,8 @@ void GreeterState::save()
         cur[QStringLiteral("schemeName")] = m_schemeName;
         cur[QStringLiteral("schemeFlavour")] = m_schemeFlavour;
         cur[QStringLiteral("schemeMode")] = m_schemeMode;
+        cur[QStringLiteral("menuStyle")] = m_menuStyle;
+        cur[QStringLiteral("menuStyleName")] = m_menuStyleName;
         m_userSettings[m_activeUser] = cur;
     }
 
@@ -289,6 +299,8 @@ void GreeterState::save()
     s[QStringLiteral("schemeFlavour")] = m_schemeFlavour;
     s[QStringLiteral("schemeMode")] = m_schemeMode;
     s[QStringLiteral("wallpaperEnabled")] = m_wallpaperEnabled;
+    s[QStringLiteral("menuStyle")] = m_menuStyle;
+    s[QStringLiteral("menuStyleName")] = m_menuStyleName;
 
     root[QStringLiteral("settings")] = s;
 
@@ -323,6 +335,8 @@ void GreeterState::reload()
     emit schemeNameChanged();
     emit schemeFlavourChanged();
     emit schemeModeChanged();
+    emit menuStyleChanged();
+    emit menuStyleNameChanged();
 }
 
 void GreeterState::setUse12Hour(bool v)
@@ -346,6 +360,22 @@ void GreeterState::setAvatarShapeName(const QString &v)
     if (m_avatarShapeName == v) return;
     m_avatarShapeName = v;
     emit avatarShapeNameChanged();
+    save();
+}
+
+void GreeterState::setMenuStyle(int v)
+{
+    if (m_menuStyle == v) return;
+    m_menuStyle = v;
+    emit menuStyleChanged();
+    save();
+}
+
+void GreeterState::setMenuStyleName(const QString &v)
+{
+    if (m_menuStyleName == v) return;
+    m_menuStyleName = v;
+    emit menuStyleNameChanged();
     save();
 }
 

@@ -23,6 +23,8 @@ class GreeterState : public QObject {
     Q_PROPERTY(bool wallpaperEnabled READ wallpaperEnabled WRITE setWallpaperEnabled NOTIFY wallpaperEnabledChanged)
     Q_PROPERTY(int avatarShape READ avatarShape WRITE setAvatarShape NOTIFY avatarShapeChanged)
     Q_PROPERTY(QString avatarShapeName READ avatarShapeName WRITE setAvatarShapeName NOTIFY avatarShapeNameChanged)
+    Q_PROPERTY(int menuStyle READ menuStyle WRITE setMenuStyle NOTIFY menuStyleChanged)
+    Q_PROPERTY(QString menuStyleName READ menuStyleName WRITE setMenuStyleName NOTIFY menuStyleNameChanged)
     Q_PROPERTY(bool lavaLampEnabled READ lavaLampEnabled WRITE setLavaLampEnabled NOTIFY lavaLampEnabledChanged)
     Q_PROPERTY(bool skipClockPage READ skipClockPage WRITE setSkipClockPage NOTIFY skipClockPageChanged)
     Q_PROPERTY(QString lastUser READ lastUser WRITE setLastUser NOTIFY lastUserChanged)
@@ -62,6 +64,12 @@ public:
     QString avatarShapeName() const { return m_avatarShapeName; }
     void setAvatarShapeName(const QString &v);
 
+    int menuStyle() const { return m_menuStyle; }
+    void setMenuStyle(int v);
+
+    QString menuStyleName() const { return m_menuStyleName; }
+    void setMenuStyleName(const QString &v);
+
     bool lavaLampEnabled() const { return m_lavaLampEnabled; }
     void setLavaLampEnabled(bool v);
 
@@ -95,6 +103,8 @@ signals:
     void wallpaperEnabledChanged();
     void avatarShapeChanged();
     void avatarShapeNameChanged();
+    void menuStyleChanged();
+    void menuStyleNameChanged();
     void lavaLampEnabledChanged();
     void skipClockPageChanged();
     void lastUserChanged();
@@ -111,6 +121,8 @@ private:
     bool m_wallpaperEnabled{true};
     int m_avatarShape{19}; // Default Cookie9Sided
     QString m_avatarShapeName{QStringLiteral("Cookie 9-Sided")};
+    int m_menuStyle{0}; // Default style
+    QString m_menuStyleName{QStringLiteral("Classical")};
     bool m_lavaLampEnabled{true};
     bool m_skipClockPage{false};
     QString m_lastUser;

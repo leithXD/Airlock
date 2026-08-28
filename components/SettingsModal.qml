@@ -50,8 +50,8 @@ Item {
     ]
 
     readonly property var menuOptions: [
-        { name: "Classic", value: "classic" },
-        { name: "Locklike",      value: "locklike" }
+        { name: "Classical", value: 1 },
+        { name: "Locklike",      value: MaterialShape.ClamShell }
     ]
 
     BlobGroup {
@@ -155,18 +155,18 @@ Item {
 
                 SplitDropdownRow {
                     Layout.fillWidth: true
-                    title: "Menu Stlye"
+                    title: "Menu Style"
                     subtitle: "Greeter menu layout"
                     topRounding: 4
                     dropdownHeight: 75
                     menuOpen: root.styleMenuOpen
                     onMenuOpenChanged: root.styleMenuOpen = menuOpen
                     options: root.menuOptions
-                    selectedValue: Colours.avatarShape
-                    selectedName: Colours.avatarShapeName
+                    selectedValue: Colours.menuStyle
+                    selectedName: Colours.menuStyleName
                     onOptionSelected: (value, name) => {
-                        Colours.avatarShape = value;
-                        Colours.avatarShapeName = name;
+                        Colours.menuStyle = value;
+                        Colours.menuStyleName = name;
                     }
                 }
 

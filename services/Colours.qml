@@ -56,6 +56,8 @@ Singleton {
             root.skipClockPage = GreeterState.skipClockPage;
             root.avatarShape = GreeterState.avatarShape;
             root.avatarShapeName = GreeterState.avatarShapeName;
+            root.menuStyle = GreeterState.menuStyle;
+            root.menuStyleName = GreeterState.menuStyleName;
             root.reloadColours();
         }
     }
@@ -67,6 +69,8 @@ Singleton {
     property bool skipClockPage: GreeterState.skipClockPage
     property int avatarShape: GreeterState.avatarShape
     property string avatarShapeName: GreeterState.avatarShapeName
+    property int menuStyle: GreeterState.menuStyle
+    property string menuStyleName: GreeterState.menuStyleName
 
     onSkipClockPageChanged: {
         if (GreeterState.skipClockPage !== skipClockPage)
@@ -94,6 +98,15 @@ Singleton {
     onAvatarShapeNameChanged: {
         if (GreeterState.avatarShapeName !== avatarShapeName)
             GreeterState.avatarShapeName = avatarShapeName;
+    }
+
+    onMenuStyleChanged: {
+        if (GreeterState.menuStyle !== menuStyle)
+            GreeterState.menuStyle = menuStyle;
+    }
+    onMenuStyleNameChanged: {
+        if (GreeterState.menuStyleName !== menuStyleName)
+            GreeterState.menuStyleName = menuStyleName;
     }
 
     // Full M3 palette matching caelestia-shell M3Palette with unified CAnim easing
